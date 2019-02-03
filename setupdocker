@@ -14,20 +14,21 @@ cd ..
 
 ### Download and unzip the deployment files: ----------
 
-DIRNAME="DockerDrive";
-DIRPATH="https://www.dropbox.com/s/he1xyh29utcol1o";
+DIRNAME=;"thinb"
+DIRPATH="https://github.com/ShoabSaadat/dockerdrive/archive/";
+WORKINGFOLDERNAME="DockerDrive"
 
 wget $DIRPATH/$DIRNAME.zip;
 sudo unzip -o ./$DIRNAME.zip -d ./$DIRNAME;
 sudo mv ./$DIRNAME/$DIRNAME/ ./DD
 sudo rm -rf $DIRNAME
-sudo mv ./DD ./$DIRNAME
+sudo mv ./DD ./$WORKINGFOLDERNAME
 
-sudo chmod 777 ./$DIRNAME/;
+sudo chmod 777 ./$WORKINGFOLDERNAME/;
 sudo rm -rf ./$DIRNAME.zip;
 
 ### Run Docker ---------------------------------------
-cd ./$DIRNAME;
+cd ./$WORKINGFOLDERNAME;
 sudo docker-compose up -d;
 
 #Setting up CMD Files ---------------------------------
