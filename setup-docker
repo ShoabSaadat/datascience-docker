@@ -32,7 +32,17 @@ sudo touch ./$WORKINGFOLDERNAME/lemp/nginx/log/access.log
 cd ./$WORKINGFOLDERNAME;
 bash rundocker;
 
-#ADDING DOCKER TO SUDO GROUP -------------------------
-#sudo groupadd docker;
-sudo gpasswd -a ubuntu docker;
-newgrp docker;
+##NOW setup dropbox:--------------------------------------------
+#cd ~;
+#wget -O dropbox.tar.gz "http://www.dropbox.com/download/?plat=lnx.x86_64";
+#sudo apt-get install nautilus-dropbox;
+#tar -xvzf dropbox.tar.gz;
+#.dropbox-dist/dropboxd &
+#sudo dropbox autostart y;
+##Setting permissions right
+#sudo chown "$USER" "$HOME"
+#sudo chown -R "$USER" ~/Dropbox ~/.dropbox
+#sudo chattr -R -i ~/Dropbox
+#sudo chmod -R u+rw ~/Dropbox ~/.dropbox
+
+
