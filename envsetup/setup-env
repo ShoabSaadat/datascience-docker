@@ -1,0 +1,63 @@
+#! /bin/bash
+#After setting up ports RUN all following commands in main home/ubuntu directory
+
+#Set privillages: --------------------------------------------------
+#Give superuser status to ubuntu (not to rstudio user)
+sudo vim /etc/sudoers
+#%ubuntu ALL=(ALL:ALL) ALL
+#after editing exit by pressing exit then SHIFT: the wq!
+
+#NOW Give password to ubuntu:----------------------------------------
+sudo sed -i 's/^PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config;
+sudo /etc/init.d/ssh restart;
+sudo passwd ubuntu;
+
+##Upgrade Linux ----------------------------------------------------
+sudo apt-get update;
+sudo apt-get upgrade;
+
+## Setup Swap Space
+bash ./swapspace;
+
+##Install ZIP ------------------------------------------------------
+sudo apt-get install zip;
+
+## Install DOCKER: -------------------------------------------------
+sudo apt-get remove docker docker-engine docker.io containerd runc;
+sudo apt-get install \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg2 \
+    software-properties-common;
+
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -;
+sudo apt-key fingerprint 0EBFCD88;
+
+sudo add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+   $(lsb_release -cs) \
+   stable";
+sudo apt-get update;
+sudo apt-get install docker-ce;
+
+#ADDING DOCKER TO SUDO GROUP ---
+sudo groupadd docker;
+sudo gpasswd -a ubuntu docker;
+newgrp docker; 
+
+## Install DOCKER-COMPOSE -------------------------------------------
+curl -L "https://github.com/docker/compose/releases/download/1.23.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose;
+sudo chmod +x /usr/local/bin/docker-compose;
+curl -L https://raw.githubusercontent.com/docker/compose/1.23.2/contrib/completion/bash/docker-compose -o /etc/bash_completion.d/docker-compose;
+
+##NOW setup dropbox:--------------------------------------------
+cd ~;
+wget -O dropbox.tar.gz "http://www.dropbox.com/download/?plat=lnx.x86_64";
+sudo apt-get install nautilus-dropbox;
+tar -xvzf dropbox.tar.gz;
+.dropbox-dist/dropboxd &
+sudo dropbox autostart y;
+
+
+

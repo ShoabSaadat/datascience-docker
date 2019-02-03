@@ -1,0 +1,74 @@
+version: '2'
+services:
+
+#Datascience Server ---------------------------------------
+  ds:
+    build: ./rs
+    volumes:
+     - ./rs:/home/rstudio/HomeFolder
+     - ./shiny:/home/rstudio/ShinyFolder
+     - ./shiny:/srv/shiny-server/
+     - ./plumber:/home/rstudio/Plumber
+     - /home/ubuntu/Dropbox:/home/rstudio/Dropbox
+    ports:
+     - "${RSPORT}:8787"
+     - "${SHINYPORT}:3838"
+    stdin_open: true
+    tty: true
+    restart: always
+
+#Plumber Server -------------------------------------------
+  dsplumber:
+    build: ./plumber
+    stdin_open: true
+    tty: true
+    volumes:
+     - ./plumber/:/home/plumber/
+    command: "/home/plumber/plumber1/plumber.R"
+    ports:
+     - "${PAPIPORT}:4000"
+    restart: always
+
+#Web Server ------------------------------------------------
+  nginx:
+    build: ./lemp/nginx/ 
+    ports:
+      - "${WEBPORT}:80"
+    volumes_from:
+      - php
+    volumes:
+      - ./lemp/nginx/log:/var/log/nginx
+      - ./lemp/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./lemp/nginx/site.conf:/etc/nginx/conf.d/site.conf
+    links:
+      - php
+
+  php:
+    build: ./lemp/php/
+    volumes:
+      - ./lemp/www:/www
+      - ./lemp/php/phpconf:/usr/local/etc/php
+    links:
+      - mariadb
+
+  mariadb:
+    image: mariadb 
+    restart: always
+    volumes:
+      - ./lemp/mariadb:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${RPW} 
+    ports:
+      - "${DBPORT}:3306"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    links:
+      - mariadb
+    ports:
+      - ${PHPMAPORT}:80
+    environment:
+      PMA_ARBITRARY: 1
+      PMA_HOST: mariadb
+      MYSQL_ROOT_PASSWORD: ${RPW}   
