@@ -6,7 +6,7 @@ cd ..
 
 ### Download and unzip the deployment files: ----------
 
-DIRNAME="thinb";
+DIRNAME="master";
 DIRPATH="https://github.com/ShoabSaadat/dockerdrive/archive/";
 WORKINGFOLDERNAME="DockerDrive"
 
@@ -27,7 +27,6 @@ sudo mkdir -p -m 777 ./$WORKINGFOLDERNAME/lemp/nginx/log
 sudo mkdir -p -m 777 ./$WORKINGFOLDERNAME/lemp/mariadb
 sudo touch ./$WORKINGFOLDERNAME/lemp/nginx/log/error.log
 sudo touch ./$WORKINGFOLDERNAME/lemp/nginx/log/access.log
-
 
 ### Run Docker ---------------------------------------
 cd ./$WORKINGFOLDERNAME;
