@@ -1,0 +1,6 @@
+#! /bin/bash
+sudo pm2 start shiny-server;
+sudo pm2 save;
+
+
+

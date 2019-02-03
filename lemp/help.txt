@@ -1,0 +1,4 @@
+#Use following code at end of wp-config to enable updating of themes and plugings without using an ftp server.
+define('FS_METHOD','direct');
+
+#Or give new wordpress wp-content folder in docker-compose.yml

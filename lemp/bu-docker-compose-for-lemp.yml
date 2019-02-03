@@ -1,0 +1,51 @@
+version: '2'
+services:
+
+  nginx:
+    build: ./nginx/ 
+    ports:
+      - "8000:80"
+    volumes_from:
+      - php
+    volumes:
+      - ./nginx/log:/var/log/nginx
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/site.conf:/etc/nginx/conf.d/site.conf
+    links:
+      - php
+
+
+  php:
+    build: ./php/
+    volumes:
+      - ./www:/www
+      - ./php/phpconf:/usr/local/etc/php
+
+    links:
+      - mariadb
+
+
+  mariadb:
+    image: mariadb 
+    restart: always
+    volumes:
+      - ./mariadb:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: '123' 
+    expose:
+      - "3306"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    links:
+      - mariadb
+    ports:
+      - 8080:80
+    environment:
+      PMA_ARBITRARY: 1
+      MYSQL_ROOT_PASSWORD: '123' 
+      PMA_HOST: mariadb
+      PMA_USER: 'root'
+      PMA_PASSWORD: '123'
+

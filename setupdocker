@@ -1,0 +1,28 @@
+#! /bin/bash
+#Install Environment on a new ubuntu machine
+cd envsetup
+sudo bash setup-env;
+cd ..
+
+### Download and unzip the deployment files:
+
+DIRNAME="DockerDrive";
+DIRPATH="https://www.dropbox.com/s/he1xyh29utcol1o";
+
+wget $DIRPATH/$DIRNAME.zip;
+sudo unzip -o ./$DIRNAME.zip -d ./$DIRNAME;
+sudo mv ./$DIRNAME/$DIRNAME/ ./DD
+sudo rm -rf $DIRNAME
+sudo mv ./DD ./$DIRNAME
+
+sudo chmod 777 ./$DIRNAME/;
+sudo rm -rf ./$DIRNAME.zip;
+
+### Run Docker
+cd ./$DIRNAME;
+sudo docker-compose up -d;
+
+#Setting up CMD Files
+sudo docker exec -it dockerdrive_nginx_1 bash cmdfile;
+sudo docker exec -it dockerdrive_ds_1 bash cmdfile;
+
