@@ -1,12 +1,5 @@
 #! /bin/bash
 
-Install the necessary directories: --------------------
-sudo mkdir -p -m 777 ./shiny
-sudo mkdir -p -m 777 ./plumber/plumber1
-sudo mkdir -p -m 777 ./lemp/www/
-sudo mkdir -p -m 777 ./lemp/nginx/log
-sudo mkdir -p -m 777 ./lemp/mariadb
-
 #Install Environment on a new ubuntu machine ----------
 cd envsetup
 sudo bash setup-env;
@@ -14,18 +7,26 @@ cd ..
 
 ### Download and unzip the deployment files: ----------
 
-DIRNAME=;"thinb"
+DIRNAME="thinb";
 DIRPATH="https://github.com/ShoabSaadat/dockerdrive/archive/";
 WORKINGFOLDERNAME="DockerDrive"
 
 wget $DIRPATH/$DIRNAME.zip;
 sudo unzip -o ./$DIRNAME.zip -d ./$DIRNAME;
-sudo mv ./$DIRNAME/$DIRNAME/ ./DD
+sudo mv ./$DIRNAME/dockerdrive-$DIRNAME/ ./DD
 sudo rm -rf $DIRNAME
 sudo mv ./DD ./$WORKINGFOLDERNAME
 
 sudo chmod 777 ./$WORKINGFOLDERNAME/;
 sudo rm -rf ./$DIRNAME.zip;
+
+Install the necessary directories: --------------------
+sudo mkdir -p -m 777 ./$WORKINGFOLDERNAME/shiny
+sudo mkdir -p -m 777 ./$WORKINGFOLDERNAME/plumber/plumber1
+sudo mkdir -p -m 777 ./$WORKINGFOLDERNAME/lemp/www/
+sudo mkdir -p -m 777 ./$WORKINGFOLDERNAME/lemp/nginx/log
+sudo mkdir -p -m 777 ./$WORKINGFOLDERNAME/lemp/mariadb
+
 
 ### Run Docker ---------------------------------------
 cd ./$WORKINGFOLDERNAME;
