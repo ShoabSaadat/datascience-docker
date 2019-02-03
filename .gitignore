@@ -1,5 +1,4 @@
 shiny/*
-plumber/plumber1/*
 lemp/www/*
 lemp/nginx/log/*
 lemp/mariadb/*
