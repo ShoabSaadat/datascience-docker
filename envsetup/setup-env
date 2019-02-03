@@ -47,16 +47,16 @@ sudo chmod +x /usr/local/bin/docker-compose;
 curl -L https://raw.githubusercontent.com/docker/compose/1.23.2/contrib/completion/bash/docker-compose -o /etc/bash_completion.d/docker-compose;
 
 ##NOW setup dropbox:--------------------------------------------
-#cd ~;
-#wget -O dropbox.tar.gz "http://www.dropbox.com/download/?plat=lnx.x86_64";
-#sudo apt-get install nautilus-dropbox;
-#tar -xvzf dropbox.tar.gz;
-#.dropbox-dist/dropboxd &
-#sudo dropbox autostart y;
+cd ~;
+wget -O dropbox.tar.gz "http://www.dropbox.com/download/?plat=lnx.x86_64";
+sudo apt-get install nautilus-dropbox;
+tar -xvzf dropbox.tar.gz;
+.dropbox-dist/dropboxd &
+sudo dropbox autostart y;
 
 #ADDING DOCKER TO SUDO GROUP ---
 #sudo groupadd docker;
-sudo gpasswd -a ubuntu docker;
+#sudo gpasswd -a ubuntu docker;
 #newgrp docker;
 
 

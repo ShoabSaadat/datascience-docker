@@ -1,5 +1,4 @@
 #! /bin/bash
-
 #Install Environment on a new ubuntu machine ----------
 cd envsetup
 sudo bash setup-env;
@@ -13,9 +12,9 @@ WORKINGFOLDERNAME="DockerDrive"
 
 wget $DIRPATH/$DIRNAME.zip;
 sudo unzip -o ./$DIRNAME.zip -d ./$DIRNAME;
-sudo mv ./$DIRNAME/dockerdrive-$DIRNAME/ ./DD
-sudo rm -rf $DIRNAME
-sudo mv ./DD ./$WORKINGFOLDERNAME
+sudo mv ./$DIRNAME/dockerdrive-$DIRNAME/ ./DD;
+sudo rm -rf $DIRNAME;
+sudo mv ./DD ./$WORKINGFOLDERNAME;
 
 sudo chmod 777 ./$WORKINGFOLDERNAME/;
 sudo rm -rf ./$DIRNAME.zip;
@@ -30,9 +29,9 @@ sudo mkdir -p -m 777 ./$WORKINGFOLDERNAME/lemp/mariadb
 
 ### Run Docker ---------------------------------------
 cd ./$WORKINGFOLDERNAME;
-sudo docker-compose up -d;
+bash rundocker;
 
-#Setting up CMD Files ---------------------------------
-sudo docker exec -it dockerdrive_nginx_1 bash cmdfile;
-sudo docker exec -it dockerdrive_ds_1 bash cmdfile;
-
+#ADDING DOCKER TO SUDO GROUP -------------------------
+#sudo groupadd docker;
+sudo gpasswd -a ubuntu docker;
+newgrp docker;
