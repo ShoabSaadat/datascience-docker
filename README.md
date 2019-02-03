@@ -1,6 +1,9 @@
 # dockerdrive
 Full Data Science Docker Setup: Rstudio server, Shiny server, Plumber API, LEMP stack
 
+---ONE STEP INSTALL
+1. Run bash setupdocker from root directory
+
 ---FASTEST INSTALL
 1. Just install dropbox first
 2. Go to /home/ubuntu/Dropbox/DockerDrive/envsetup and RUN bash setup-env (or just RUN bash setupdocker)
