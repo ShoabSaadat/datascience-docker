@@ -1,0 +1,121 @@
+#! bin/bash
+# RUN SETUP FILE WITH SUDO
+##### INSTALLING ENVIRONMENT ##################################################
+echo "Installing Environment..."
+#! /bin/bash
+#After setting up ports RUN all following commands in main home/ubuntu directory
+
+#Set privillages: --------------------------------------------------
+#Give superuser status to ubuntu (not to rstudio user)
+sudo vim /etc/sudoers
+#%ubuntu ALL=(ALL:ALL) ALL
+#after editing exit by pressing exit then SHIFT: the wq!
+
+#NOW Give password to ubuntu:----------------------------------------
+sudo sed -i 's/^PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config;
+sudo /etc/init.d/ssh restart;
+sudo passwd ubuntu;
+
+#Upgrade Linux ----------------------------------------------------
+sudo apt-get update;
+sudo apt-get upgrade;
+
+#Setup SWAP Space -------------------------------------------------
+sudo dd if=/dev/zero of=/root/myswapfile bs=1M count=1024;
+sudo ls -l /root/myswapfile;
+sudo chmod 600 /root/myswapfile;
+sudo mkswap /root/myswapfile;
+sudo swapon /root/myswapfile;
+sudo vim /etc/fstab;
+#then add following line to make it autorestart: 
+#/root/myswapfile               swap                    swap    defaults        0 0
+#verify:
+sudo swapon -s;
+sudo free -k;
+swapoff -a;
+swapon -a;
+#Link:
+#https://www.thegeekstuff.com/2010/08/how-to-add-swap-space/
+
+#Install ZIP ------------------------------------------------------
+sudo apt-get install zip;
+
+# Install DOCKER: -------------------------------------------------
+sudo apt-get remove docker docker-engine docker.io containerd runc;
+sudo apt-get install \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg2 \
+    software-properties-common;
+
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -;
+sudo apt-key fingerprint 0EBFCD88;
+
+sudo add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+   $(lsb_release -cs) \
+   stable";
+sudo apt-get update;
+sudo apt-get install docker-ce;
+
+# Install DOCKER-COMPOSE -------------------------------------------
+sudo curl -L "https://github.com/docker/compose/releases/download/1.23.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose;
+sudo chmod +x /usr/local/bin/docker-compose;
+sudo curl -L https://raw.githubusercontent.com/docker/compose/1.23.2/contrib/completion/bash/docker-compose -o /etc/bash_completion.d/docker-compose;
+
+
+######## INSTALLING DOCKER ######################################################
+echo "Installating Docker Setup..."
+#! /bin/bash
+# Download and unzip the deployment files: ----------
+
+DIRNAME="master";
+DIRPATH="https://github.com/ShoabSaadat/dockerdrive/archive/";
+WORKINGFOLDERNAME="DockerDrive";
+
+wget $DIRPATH/$DIRNAME.zip;
+sudo unzip -o ./$DIRNAME.zip -d ./$DIRNAME;
+sudo mv ./$DIRNAME/dockerdrive-$DIRNAME/ ./DD;
+sudo rm -rf $DIRNAME;
+sudo mv ./DD ./$WORKINGFOLDERNAME;
+sudo chmod 777 ./$WORKINGFOLDERNAME/;
+sudo rm -rf ./$DIRNAME.zip;
+
+#Install the necessary directories: --------------------
+sudo mkdir -p -m 777 ./$WORKINGFOLDERNAME/shiny;
+sudo mkdir -p -m 777 ./$WORKINGFOLDERNAME/plumber/plumber1;
+sudo mkdir -p -m 777 ./$WORKINGFOLDERNAME/lemp/www/;
+sudo mkdir -p -m 777 ./$WORKINGFOLDERNAME/lemp/nginx/log;
+sudo mkdir -p -m 777 ./$WORKINGFOLDERNAME/lemp/mariadb;
+sudo touch ./$WORKINGFOLDERNAME/lemp/nginx/log/error.log;
+sudo touch ./$WORKINGFOLDERNAME/lemp/nginx/log/access.log;
+
+### Run Docker ---------------------------------------
+cd ./$WORKINGFOLDERNAME;
+bash rundocker;
+
+
+######### INSTALLING DROPBOX #####################################################
+echo "Installating Dropbox..."
+#NOW setup dropbox:--------------------------------------------
+sudo chown "$USER" "$HOME"
+cd ~;
+wget -O dropbox.tar.gz "http://www.dropbox.com/download/?plat=lnx.x86_64";
+sudo apt-get install nautilus-dropbox;
+tar -xvzf dropbox.tar.gz;
+sudo dropbox autostart y;
+.dropbox-dist/dropboxd &
+
+#Setting permissions right -------------------------------------
+sudo chown "$USER" "$HOME";
+sudo chown -R "$USER" ~/Dropbox ~/.dropbox;
+sudo chattr -R -i ~/Dropbox;
+sudo chmod -R u+rw ~/Dropbox ~/.dropbox;
+
+#ADDING DOCKER TO SUDO GROUP -----------------------------------
+#sudo groupadd docker;
+sudo gpasswd -a ubuntu docker;
+newgrp docker;
+
+echo "Installation Complete !!!"
